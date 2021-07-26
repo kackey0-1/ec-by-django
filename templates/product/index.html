@@ -1,0 +1,8 @@
+{% for product in products %}
+    <span>{{product.name}}</span>
+    <span>{{product.description}}</span>
+    <span>{{product.price}}</span>
+    <a href="{% url 'product:detail' product.id %}">Show</a>
+    <a href="{% url 'product:edit' product.id %}">Edit</a><br>
+{% endfor %}
+<a href="{% url 'product:product' %}">New</a>
