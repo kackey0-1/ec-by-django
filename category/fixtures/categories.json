@@ -1,0 +1,222 @@
+[
+  {
+    "model": "category.Category",
+    "pk": 1,
+    "fields": {
+      "name": "ビジネス",
+      "description": "ビジネス",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 2,
+    "fields": {
+      "name": "文学・評論",
+      "description": "文学・評論",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 3,
+    "fields": {
+      "name": "人文・思想",
+      "description": "人文・思想",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 4,
+    "fields": {
+      "name": "スポーツ",
+      "description": "スポーツ",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 5,
+    "fields": {
+      "name": "コンピュータ・IT",
+      "description": "コンピュータ・IT",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 6,
+    "fields": {
+      "name": "資格・検定・就職",
+      "description": "資格・検定・就職",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 7,
+    "fields": {
+      "name": "絵本・児童書",
+      "description": "絵本・児童書",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 8,
+    "fields": {
+      "name": "写真集",
+      "description": "写真集",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 9,
+    "fields": {
+      "name": "ゲーム攻略本",
+      "description": "ゲーム攻略本",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 10,
+    "fields": {
+      "name": "雑誌",
+      "description": "雑誌",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 11,
+    "fields": {
+      "name": "アート・デザイン",
+      "description": "アート・デザイン",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 12,
+    "fields": {
+      "name": "ゲーム攻略本",
+      "description": "ゲーム攻略本",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 13,
+    "fields": {
+      "name": "ノンフィクション",
+      "description": "ノンフィクション",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 14,
+    "fields": {
+      "name": "ゲーム攻略本",
+      "description": "ゲーム攻略本",
+      "major_category_name": "本",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 15,
+    "fields": {
+      "name": "ノートPC",
+      "description": "ノートPC",
+      "major_category_name": "コンピュータ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 16,
+    "fields": {
+      "name": "デスクトップPC",
+      "description": "デスクトップPC",
+      "major_category_name": "コンピュータ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 17,
+    "fields": {
+      "name": "タブレット",
+      "description": "タブレット",
+      "major_category_name": "コンピュータ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 18,
+    "fields": {
+      "name": "19~20インチ",
+      "description": "19~20インチ",
+      "major_category_name": "ディスプレイ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 19,
+    "fields": {
+      "name": "デスクトップPC",
+      "description": "デスクトップPC",
+      "major_category_name": "ディスプレイ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  },
+  {
+    "model": "category.Category",
+    "pk": 20,
+    "fields": {
+      "name": "タブレット",
+      "description": "タブレット",
+      "major_category_name": "ディスプレイ",
+      "created_at": "2021-07-25 13:09:14.852244+00:00",
+      "updated_at": "2021-07-25 13:09:14.852244+00:00"
+    }
+  }
+]
