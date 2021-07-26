@@ -1,6 +1,6 @@
 import logging
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
 from .models import Product
@@ -34,3 +34,9 @@ class ProductEditView(UpdateView):
     model = Product
     fields = ['name', 'description', 'price']
     success_url = reverse_lazy('product:products')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('product:products')
+
