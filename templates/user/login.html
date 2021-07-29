@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}ログイン{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <h3 class="mt-3 mb-3">ログイン</h3>
+
+      <hr>
+
+      <form method="post" action="{% url 'user:login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control samazon-login-input" placeholder="メールアドレス" name="username" type="text" required>
+
+          {% if form.errors %}
+          <span class="samazon-error-message">
+            <strong>メールアドレスが正しくない可能性があります。</strong>
+          </span>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+            <input class="form-control samazon-login-input" placeholder="パスワード" name="password" type="password" required>
+
+          {% if form.errors %}
+          <span class="samazon-error-message">
+            <strong>パスワードが正しくない可能性があります。</strong>
+          </span>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <div class="form-check">
+
+            <input class="form-check-input" type="checkbox" />
+            <label class="form-check-label samazon-check-label w-100">次回から自動的にログインする</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input class="mt-3 btn samazon-submit-button w-100" type="submit" value="ログイン"/>
+        </div>
+        <a class="btn btn-link mt-3 d-flex justify-content-center samazon-login-text" href="{% url 'user:reset' %}">パスワードをお忘れの場合</a>
+      </form>
+      <hr>
+      <div class="form-group">
+        <a class="btn btn-link mt-3 d-flex justify-content-center samazon-login-text" href="{% url 'user:signup' %}">新規登録</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
