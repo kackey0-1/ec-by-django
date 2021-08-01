@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>Django App</title>
+      {% csrf_token %}
+      {% block extra_css %}
+      <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}" type="text/css">
+      {% endblock %}
+      {% load sass_tags %}
+      <link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
+      <link href="{% sass_src 'scss/ec.scss' %}" rel="stylesheet" type="text/css" />
+      <!-- Scripts -->
+      {% block extra_js %}
+      <script type="text/javascript" src="{% static 'js/bootstrap/jquery-3.3.1.slim.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+      {% endblock %}
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <div class="container">
+          <a class="navbar-brand" href="/">Django</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <!-- Right Side Of Navbar -->
+              <ul class="navbar-nav ml-auto">
+              <!-- user_signed_in? はユーザがログインしているか調べるdeviseのHelperメソッド -->
+              {% if user.is_authenticated %}
+                <!-- current_user は現在ログインしているUserオブジェクトを返すdeviseのHelperメソッド -->
+                <li class="nav-item dropdown">
+                  <a id="navbarDropdown", class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      {{ user.name }} <span class="caret"></span>
+                  </a>
+
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a href="{% url 'user:logout' %}" class="dropdown-item">ログアウト</a>
+                  </div>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'user:login' %}">ログイン</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'user:signup' %}">登録</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="py-4 mb-5">
+      {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}success{% endif %} text-center">
+          {{ message }}<br/>
+        </p>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
+
+
