@@ -1,30 +1,25 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 
 from .models import User
 
 
-class RegisterForm(forms.ModelForm):
-    """ユーザー登録画面用のフォーム"""
+class SignupForm(forms.ModelForm):
 
     class Meta:
-        # 利用するモデルクラスを指定
         model = User
-        # 利用するモデルのフィールドを指定
-        fields = ('password',)
+        fields = ('email', 'password', 'name', 'address', 'phone', )
         # ウィジェットを上書き
         widgets = {
             # 'username': forms.TextInput(attrs={'placeholder': 'ユーザー名'}),
-            'password': forms.PasswordInput(attrs={'placeholder': 'パスワード'}),
+            # 'password': forms.PasswordInput(attrs={'placeholder': 'パスワード'}),
         }
 
     password2 = forms.CharField(
         label='確認用パスワード',
         required=True,
-        strip=False,
-        widget=forms.PasswordInput(attrs={'placeholder': '確認用パスワード'}),
     )
 
     def __init__(self, *args, **kwargs):
@@ -32,13 +27,6 @@ class RegisterForm(forms.ModelForm):
         # フィールドの属性を書き換え
         self.fields['email'].required = True
         self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス'}
-
-    # def clean_username(self):
-    #     value = self.cleaned_data['username']
-    #     if len(value) < 3:
-    #         raise forms.ValidationError(
-    #             '%(min_length)s文字以上で入力してください', params={'min_length': 3})
-    #     return value
 
     def clean_password(self):
         value = self.cleaned_data['password']
@@ -56,14 +44,12 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     """ログイン画面用のフォーム"""
 
-    # username = UsernameField(
-    #     label='ユーザー名',
-    #     max_length=255,
-    #     widget=forms.TextInput(attrs={'placeholder': 'ユーザー名', 'autofocus': True}),
-    # )
-
+    email = forms.CharField(
+        label=_('メールアドレス'),
+        widget=forms.TextInput(attrs={'placeholder': 'メールアドレス', 'autofocus': True}),
+    )
     password = forms.CharField(
-        label='パスワード',
+        label=_('パスワード'),
         strip=False,
         widget=forms.PasswordInput(attrs={'placeholder': 'パスワード'}, render_value=True),
     )
@@ -76,23 +62,16 @@ class LoginForm(forms.Form):
         value = self.cleaned_data['password']
         return value
 
-    # def clean_username(self):
-    #     value = self.cleaned_data['username']
-    #     if len(value) < 3:
-    #         raise forms.ValidationError(
-    #             '%(min_length)s文字以上で入力してください', params={'min_length': 3})
-    #     return value
-
     def clean(self):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
         try:
             user = get_user_model().objects.get(email=email)
         except ObjectDoesNotExist:
-            raise forms.ValidationError("正しいユーザー名を入力してください")
+            raise forms.ValidationError("正しいメールアドレスを入力してください")
         # パスワードはハッシュ化されて保存されているので平文での検索はできない
         if not user.check_password(password):
-            raise forms.ValidationError("正しいユーザー名とパスワードを入力してください")
+            raise forms.ValidationError("正しいメールアドレスとパスワードを入力してください")
         # 取得したユーザーオブジェクトを使い回せるように内部に保持しておく
         self.user_cache = user
 
@@ -100,21 +79,19 @@ class LoginForm(forms.Form):
         return self.user_cache
 
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('last_name', 'first_name',)
+class PasswordResetForm(forms.Form):
+    email = forms.CharField(label=_('メールアドレス'), widget=forms.TextInput(attrs={'placeholder': 'メールアドレス', 'autofocus': True}),)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # self.fields['username'].widget.attrs = {'placeholder': 'ユーザー名'}
-        # self.fields['email'].required = True
-        # self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス'}
-        # self.fields['password'].widget = forms.PasswordInput(attrs={'placeholder': 'パスワード'}, render_value=True)
-        self.fields['last_name'].widget.attrs = {'placeholder': '苗字'}
-        self.fields['first_name'].widget.attrs = {'placeholder': '名前'}
 
-    # def clean_username(self):
-    #     value = self.cleaned_data['username']
-    #     return value
+class PasswordEditForm(forms.Form):
 
+    password = forms.CharField(label='確認用パスワード', required=True,)
+    password2 = forms.CharField(label='確認用パスワード', required=True,)
+    emailb64 = forms.CharField(required=True)
+    token = forms.CharField(required=True)
+
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+        if password != password2:
+            raise forms.ValidationError("パスワードが一致しません。")

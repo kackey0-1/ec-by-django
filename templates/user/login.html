@@ -14,11 +14,13 @@
       <form method="post" action="{% url 'user:login' %}">
         {% csrf_token %}
         <div class="form-group">
-            <input class="form-control samazon-login-input" placeholder="メールアドレス" name="username" type="text" required>
+            <input class="form-control samazon-login-input" placeholder="メールアドレス" name="email" type="text" required>
 
-          {% if form.errors %}
+          {% if form.email.errors %}
           <span class="samazon-error-message">
-            <strong>メールアドレスが正しくない可能性があります。</strong>
+            {% for error in form.email.errors %}
+            <strong>{{ error }}</strong><br/>
+            {% endfor %}
           </span>
           {% endif %}
         </div>
@@ -26,9 +28,11 @@
         <div class="form-group">
             <input class="form-control samazon-login-input" placeholder="パスワード" name="password" type="password" required>
 
-          {% if form.errors %}
+          {% if form.password.errors %}
           <span class="samazon-error-message">
-            <strong>パスワードが正しくない可能性があります。</strong>
+            {% for error in form.password.errors %}
+            <strong>{{ error }}</strong>
+            {% endfor %}
           </span>
           {% endif %}
         </div>

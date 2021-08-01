@@ -2,52 +2,70 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login as auth_login, logout as auth_logout, get_user_model
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 
-from .forms import LoginForm, RegisterForm, ProfileForm
+from .forms import LoginForm, SignupForm, PasswordResetForm, PasswordEditForm
 
 logger = logging.getLogger(__name__)
+UserModel = get_user_model()
 
 
-class RegisterView(View):
+class SignupView(View):
     def get(self, request, *args, **kwargs):
         # すでにログインしている場合はショップ画面へリダイレクト
         if request.user.is_authenticated:
-            return redirect(reverse('shop:index'))
+            return redirect(settings.LOGIN_REDIRECT_URL)
 
         context = {
-            'form': RegisterForm(),
+            'form': SignupForm(),
         }
         return render(request, 'user/signup.html', context)
 
     def post(self, request, *args, **kwargs):
         logger.info("You're in post!!!")
-
-        # リクエストからフォームを作成
-        form = RegisterForm(request.POST)
-        # バリデーション
+        form = SignupForm(request.POST)
         if not form.is_valid():
-            # バリデーションNGの場合はアカウント登録画面のテンプレートを再表示
             return render(request, 'user/signup.html', {'form': form})
-
-        # 保存する前に一旦取り出す
         user = form.save(commit=False)
-        # パスワードをハッシュ化してセット
         user.set_password(form.cleaned_data['password'])
-        # ユーザーオブジェクトを保存
         user.save()
+        current_site = get_current_site(request)
+        mail_subject = 'Activate your account.'
+        message = render_to_string('mail/user/confirmation_instructions.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.email)),
+            'token': default_token_generator.make_token(user), })
+        to_email = form.cleaned_data.get('email')
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+        return render(request, 'user/verify.html')
 
-        # ログイン処理（取得した Userオブジェクトをセッションに保存 & Userデータを更新）
-        auth_login(request, user)
 
-        return redirect(settings.LOGIN_REDIRECT_URL)
-
-
-register = RegisterView.as_view()
+def activate(request, emailb64, token):
+    try:
+        email = urlsafe_base64_decode(emailb64).decode()
+        user = UserModel.objects.get(email=email)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return render(request, 'user/complete_confirmation.html')
+    else:
+        messages.error(request, 'メールアドレスが有効ではありません。')
+        logger.info(messages)
+        return render(request, 'user/verify.html')
 
 
 class LoginView(View):
@@ -60,7 +78,6 @@ class LoginView(View):
         context = {
             'form': LoginForm(),
         }
-        # ログイン画面用のテンプレートに値が空のフォームをレンダリング
         return render(request, 'user/login.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -71,18 +88,17 @@ class LoginView(View):
         if not form.is_valid():
             # バリデーションNGの場合はログイン画面のテンプレートを再表示
             return render(request, 'user/login.html', {'form': form})
-
         # ユーザーオブジェクトをフォームから取得
         user = form.get_user()
+        if not user.is_active:
+            messages.error(request, "ユーザーが有効化されていません。")
+            return render(request, 'user/login.html', {'form': form})
         # ログイン処理（取得したユーザーオブジェクトをセッションに保存 & ユーザーデータを更新）
         auth_login(request, user)
-        # ログイン後処理（ログイン回数を増やしたりする。本来は user_logged_in シグナルを使えばもっと簡単に書ける）
-        user.post_login()
         # ロギング
         logger.info("User(id={}) has logged in.".format(user.id))
         # フラッシュメッセージを画面に表示
         messages.info(request, "ログインしました。")
-
         # ショップ画面にリダイレクト
         return redirect(reverse('product:index'))
 
@@ -94,33 +110,64 @@ class LogoutView(View):
             logger.info("User(id={}) has logged out.".format(request.user.id))
             # ログアウト処理
             auth_logout(request)
-
-        # フラッシュメッセージを画面に表示
-        messages.info(request, "ログアウトしました。")
-
+            # フラッシュメッセージを画面に表示
+            messages.info(request, "ログアウトしました。")
         return redirect(reverse('user:login'))
 
 
-class ProfileView(LoginRequiredMixin, View):
+class PasswordResetView(View):
     def get(self, request, *args, **kwargs):
-        form = ProfileForm(None, instance=request.user)
         context = {
-            'form': form,
-        }
-        return render(request, 'user/profile.html', context)
+            'form': PasswordResetForm(), }
+        return render(request, 'user/reset_password.html', context)
 
     def post(self, request, *args, **kwargs):
-        logger.info("You're in post!!!")
-
-        # フォームを使ってバリデーション
-        form = ProfileForm(request.POST, instance=request.user)
+        form = PasswordResetForm(request.POST)
         if not form.is_valid():
-            return render(request, 'user/profile.html', {'form': form})
+            return render(request, 'user/reset_password.html', {'form': form})
+        user = UserModel.objects.get(email=form.cleaned_data['email'])
+        current_site = get_current_site(request)
+        mail_subject = 'Reset your password.'
+        message = render_to_string('mail/user/password_reset.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.email)),
+            'token': default_token_generator.make_token(user), })
+        to_email = form.cleaned_data.get('email')
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+        messages.info(request, 'パスワードリセット用のリンクをメールにて送信しました。')
+        return render(request, 'user/reset_password.html', {'form': form})
 
-        # 変更を保存
-        form.save()
 
-        # フラッシュメッセージを画面に表示
-        messages.info(request, "プロフィールを更新しました。")
-        return redirect('/profile/')
+class PasswordEditView(View):
+    def get(self, request, emailb64, token, *args, **kwargs):
+        context = {
+            'form': PasswordEditForm(),
+            'emailb64': emailb64,
+            'token': token, }
+        return render(request, 'user/edit_password.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = PasswordEditForm(request.POST)
+        if not form.is_valid():
+            context = {
+                'form': form,
+                'emailb64': form.cleaned_data['emailb64'],
+                'token': form.cleaned_data['token'], }
+            return render(request, 'user/edit_password.html', context)
+        try:
+            email = urlsafe_base64_decode(form.cleaned_data['emailb64']).decode()
+            user = UserModel.objects.get(email=email)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and default_token_generator.check_token(user, form.cleaned_data['token']):
+            user.set_password(form.cleaned_data['password'])
+            user.is_active = True
+            user.save()
+            return render(request, 'user/complete_confirmation.html')
+        else:
+            messages.error(request, 'トークンが有効ではありません。')
+            logger.info(messages)
+            return render(request, 'user/reset_password.html')
 

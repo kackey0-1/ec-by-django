@@ -38,8 +38,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    name = models.CharField(_('name'), max_length=150, blank=True)
+    postal_code = models.CharField(_('postal code'), max_length=8)
+    address = models.CharField(_('address'), max_length=255, blank=True)
+    phone = models.CharField(_('phone'), max_length=13, blank=True)
 
     is_staff = models.BooleanField(
         _('staff status'),
@@ -49,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         _('active'),
-        default=True,
+        default=False,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
