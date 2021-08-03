@@ -1,3 +1,6 @@
+import re
+
+from django.core.validators import RegexValidator
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -38,25 +41,21 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
-    name = models.CharField(_('name'), max_length=150, blank=True)
-    postal_code = models.CharField(_('postal code'), max_length=8)
+    name = models.CharField(_('name'), max_length=150, blank=False)
+    postal_code = models.CharField(_('postal code'), max_length=8,)
     address = models.CharField(_('address'), max_length=255, blank=True)
-    phone = models.CharField(_('phone'), max_length=13, blank=True)
+    phone = models.CharField(_('phone'), max_length=13, blank=True,)
 
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
-        help_text=_(
-            'Designates whether the user can log into this admin site.'),
-    )
+        help_text=_('Designates whether the user can log into this admin site.'),)
     is_active = models.BooleanField(
         _('active'),
         default=False,
         help_text=_(
             'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
-        ),
-    )
+            'Unselect this instead of deleting accounts.'),)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
