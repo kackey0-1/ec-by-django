@@ -21,11 +21,12 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="name" class="form-control samazon-login-input" placeholder="山田 太郎" autofocus required/>
-
-            {% if form.errors %}
+            <input type="text" name="name" class="form-control samazon-login-input" placeholder="山田 太郎" autofocus required {%if form.name.value%}value="{{form.name.value}}"{%endif%}/>
+            {% if form.name.errors %}
               <span class="samazon-error-message">
-                <strong><%= resource.errors.full_messages_for(:name).first %></strong>
+                {% for error in form.name.errors %}
+                <strong>{{ error }}</strong>
+                {% endfor %}
               </span>
             {% endif %}
           </div>
@@ -40,11 +41,12 @@
           </label>
 
           <div class="col-md-7">
-            <input type="email" name="email" class="form-control samazon-login-input" autofocus required autocomplete placeholder="メールアドレス"/>
-
-            {% if form.errors %}
+            <input type="email" name="email" class="form-control samazon-login-input" autofocus required autocomplete placeholder="メールアドレス" {%if form.email.value%} value="{{form.email.value}}" {%endif%}/>
+            {% if form.email.errors %}
               <span class="samazon-error-message">
-                <strong><%= resource.errors.full_messages_for(:email).first %></strong>
+                {% for error in form.email.errors %}
+                <strong>{{ error }}</strong>
+                {% endfor %}
               </span>
             {% endif %}
           </div>
@@ -57,9 +59,15 @@
               <span class="samazon-require-input-label-text">必須</span>
             </span>
           </label>
-
           <div class="col-md-7">
-            <input type="text" name="postal_code" class="form-control samazon-login-input" required placeholder="150-0043"/>
+            <input type="text" name="postal_code" class="form-control samazon-login-input" required placeholder="150-0043" {% if form.postal_code.value%} value="{{form.postal_code.value}}" {%endif%}/>
+            {% if form.postal_code.errors %}
+              <span class="samazon-error-message">
+                {% for error in form.postal_code.errors %}
+                <strong>{{ error }}</strong>
+                {% endfor %}
+              </span>
+            {% endif %}
           </div>
         </div>
 
@@ -72,7 +80,7 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="address" class="form-control samazon-login-input" required placeholder="東京都渋谷区道玄坂２丁目１１−１"/>
+            <input type="text" name="address" class="form-control samazon-login-input" required placeholder="東京都渋谷区道玄坂２丁目１１−１" {%if form.address.value%}value="{{form.address.value}}"{%endif%}/>
           </div>
         </div>
 
@@ -85,7 +93,14 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="phone" class="form-control samazon-login-input" required placeholder="03-5790-9039"/>
+            <input type="text" name="phone" class="form-control samazon-login-input" required placeholder="03-5790-9039"{%if form.phone.value%} value="{{form.phone.value}}"{%endif%}/>
+            {% if form.phone.errors %}
+            <span class="samazon-error-message">
+              {% for error in form.phone.errors %}
+              <strong>{{ error }}</strong>
+              {% endfor %}
+            </span>
+            {% endif %}
           </div>
         </div>
 
@@ -98,10 +113,12 @@
           </label>
 
           <div class="col-md-7">
-            <input type="password" name="password" class="form-control samazon-login-input" autofocus/>
-            {% if form.errors %}
+            <input type="password" name="password" class="form-control samazon-login-input" autofocus required/>
+            {% if form.password.errors %}
             <span class="samazon-error-message">
-              <strong><%= resource.errors.full_messages_for(:password).first %></strong>
+              {% for error in form.password.errors %}
+              <strong>{{ error }}</strong>
+              {% endfor %}
             </span>
             {% endif %}
             </div>
@@ -110,7 +127,7 @@
         <div class="form-group row">
           <label class="col-md-5 col-form-label text-md-left"></label>
           <div class="col-md-7">
-            <input type="password" name="password2" class="form-control samazon-login-input">
+            <input type="password" name="password2" class="form-control samazon-login-input" required>
           </div>
         </div>
 
