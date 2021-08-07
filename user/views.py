@@ -6,12 +6,9 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, get_
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
 from django.views import View
 
 from .forms import LoginForm, SignupForm, PasswordResetForm, PasswordEditForm
@@ -39,16 +36,8 @@ class SignupView(View):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
         user.save()
-        current_site = get_current_site(request)
-        mail_subject = 'Activate your account.'
-        message = render_to_string('mail/user/confirmation_instructions.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.email)),
-            'token': default_token_generator.make_token(user), })
-        to_email = form.cleaned_data.get('email')
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
+        current_site = get_current_site(request).domain
+        user.send_verify_mail(current_site)
         return render(request, 'user/verify.html')
 
 
@@ -59,8 +48,7 @@ def activate(request, emailb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and default_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
+        user.activate_user()
         return render(request, 'user/complete_confirmation.html')
     else:
         messages.error(request, 'メールアドレスが有効ではありません。')
@@ -95,6 +83,7 @@ class LoginView(View):
             return render(request, 'user/login.html', {'form': form})
         # ログイン処理（取得したユーザーオブジェクトをセッションに保存 & ユーザーデータを更新）
         auth_login(request, user)
+        user.post_login()
         # ロギング
         logger.info("User(id={}) has logged in.".format(user.id))
         # フラッシュメッセージを画面に表示
@@ -126,16 +115,8 @@ class PasswordResetView(View):
         if not form.is_valid():
             return render(request, 'user/reset_password.html', {'form': form})
         user = UserModel.objects.get(email=form.cleaned_data['email'])
-        current_site = get_current_site(request)
-        mail_subject = 'Reset your password.'
-        message = render_to_string('mail/user/password_reset.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.email)),
-            'token': default_token_generator.make_token(user), })
-        to_email = form.cleaned_data.get('email')
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
+        current_site = get_current_site(request).domain
+        user.send_reset_password_mail(current_site)
         messages.info(request, 'パスワードリセット用のリンクをメールにて送信しました。')
         return render(request, 'user/reset_password.html', {'form': form})
 
@@ -163,8 +144,7 @@ class PasswordEditView(View):
             user = None
         if user is not None and default_token_generator.check_token(user, form.cleaned_data['token']):
             user.set_password(form.cleaned_data['password'])
-            user.is_active = True
-            user.save()
+            user.activate_user()
             return render(request, 'user/complete_confirmation.html')
         else:
             messages.error(request, 'トークンが有効ではありません。')

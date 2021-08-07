@@ -1,4 +1,5 @@
 import logging
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -8,7 +9,7 @@ from category.models import Category
 logger = logging.getLogger(__name__)
 
 
-class ProductIndexView(ListView):
+class ProductIndexView(LoginRequiredMixin, ListView):
     template_name = 'product/index.html'
     context_object_name = 'products'
     model = Product
@@ -39,12 +40,12 @@ class ProductCreateView(CreateView):
         return super(ProductCreateView, self).form_valid(form)
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = 'product/show.html'
     model = Product
 
 
-class ProductEditView(UpdateView):
+class ProductEditView(LoginRequiredMixin, UpdateView):
     template_name = 'product/edit.html'
     model = Product
     fields = ['name', 'description', 'price']
@@ -60,7 +61,7 @@ class ProductEditView(UpdateView):
         return super(ProductEditView, self).form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('product:index')
 

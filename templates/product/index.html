@@ -1,13 +1,24 @@
-{% for product in products %}
-    <span>{{product.name}}</span>
-    <span>{{product.description}}</span>
-    <span>{{product.price}}</span>
-    <span>{{product.category.name}}</span>
-    <a href="{% url 'product:detail' product.id %}">Show</a>
-    <a href="{% url 'product:edit' product.id %}">Edit</a>
-    <form action="{% url 'product:delete' product.id %}" method="POST" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      {% for product in products %}
+      <span>{{product.name}}</span>
+      <span>{{product.description}}</span>
+      <span>{{product.price}}</span>
+      <span>{{product.category.name}}</span>
+      <a href="{% url 'product:detail' product.id %}">Show</a>
+      <a href="{% url 'product:edit' product.id %}">Edit</a>
+      <form action="{% url 'product:delete' product.id %}" method="POST" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
         {% csrf_token %}
         <button type="submit">Delete</button>
-    </form><br>
-{% endfor %}
-<a href="{% url 'product:product' %}">New</a>
+      </form><br>
+      {% endfor %}
+      <a href="{% url 'product:product' %}">New</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

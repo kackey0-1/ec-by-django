@@ -1,5 +1,15 @@
-{{product.name}}
-{{product.description}}
-{{product.price}}
+{% extends "base.html" %}
+{% load static %}
 
-<a href="{% url 'product:index' %}">Back</a>
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      {{product.name}}
+      {{product.description}}
+      {{product.price}}
+      <a href="{% url 'product:index' %}">Back</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
