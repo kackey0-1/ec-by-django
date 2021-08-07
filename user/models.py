@@ -5,6 +5,10 @@ from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'),)
+    login_count = models.IntegerField(_('login count'), default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -69,17 +74,34 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def get_full_name(self):
-        """Return the first_name plus the last_name, with a space in
-        between."""
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+    def post_login(self):
+        """ログイン後処理"""
+        self.login_count += 1
+        self.save()
 
-    def get_short_name(self):
-        """Return the short name for the user."""
-        return self.first_name
+    def activate_user(self):
+        self.is_active = True
+        self.save()
 
-    def email_user(self, subject, message, from_email=None, **kwargs):
+    def send_verify_mail(self, current_site):
+        subject = 'Activate your account.'
+        message = render_to_string('mail/user/confirmation_instructions.html', {
+            'user': self,
+            'domain': current_site,
+            'uid': urlsafe_base64_encode(force_bytes(self.email)),
+            'token': default_token_generator.make_token(self), })
+        self._send_email(subject, message)
+
+    def send_reset_password_mail(self, current_site):
+        subject = 'Reset your password.'
+        message = render_to_string('mail/user/password_reset.html', {
+            'user': self,
+            'domain': current_site,
+            'uid': urlsafe_base64_encode(force_bytes(self.email)),
+            'token': default_token_generator.make_token(self), })
+        self._send_email(subject, message)
+
+    def _send_email(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 

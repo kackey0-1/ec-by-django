@@ -21,7 +21,7 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="name" class="form-control samazon-login-input" placeholder="山田 太郎" autofocus required/>
+            <input type="text" name="name" class="form-control samazon-login-input" placeholder="山田 太郎" autofocus required {%if form.name.value%}value="{{form.name.value}}"{%endif%}/>
             {% if form.name.errors %}
               <span class="samazon-error-message">
                 {% for error in form.name.errors %}
@@ -41,7 +41,7 @@
           </label>
 
           <div class="col-md-7">
-            <input type="email" name="email" class="form-control samazon-login-input" autofocus required autocomplete placeholder="メールアドレス"/>
+            <input type="email" name="email" class="form-control samazon-login-input" autofocus required autocomplete placeholder="メールアドレス" {%if form.email.value%} value="{{form.email.value}}" {%endif%}/>
             {% if form.email.errors %}
               <span class="samazon-error-message">
                 {% for error in form.email.errors %}
@@ -60,7 +60,7 @@
             </span>
           </label>
           <div class="col-md-7">
-            <input type="text" name="postal_code" class="form-control samazon-login-input" required placeholder="150-0043"/>
+            <input type="text" name="postal_code" class="form-control samazon-login-input" required placeholder="150-0043" {% if form.postal_code.value%} value="{{form.postal_code.value}}" {%endif%}/>
             {% if form.postal_code.errors %}
               <span class="samazon-error-message">
                 {% for error in form.postal_code.errors %}
@@ -80,7 +80,7 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="address" class="form-control samazon-login-input" required placeholder="東京都渋谷区道玄坂２丁目１１−１"/>
+            <input type="text" name="address" class="form-control samazon-login-input" required placeholder="東京都渋谷区道玄坂２丁目１１−１" {%if form.address.value%}value="{{form.address.value}}"{%endif%}/>
           </div>
         </div>
 
@@ -93,7 +93,7 @@
           </label>
 
           <div class="col-md-7">
-            <input type="text" name="phone" class="form-control samazon-login-input" required placeholder="03-5790-9039"/>
+            <input type="text" name="phone" class="form-control samazon-login-input" required placeholder="03-5790-9039"{%if form.phone.value%} value="{{form.phone.value}}"{%endif%}/>
             {% if form.phone.errors %}
             <span class="samazon-error-message">
               {% for error in form.phone.errors %}

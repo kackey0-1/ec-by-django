@@ -22,7 +22,6 @@ class SignupForm(forms.ModelForm):
     password2 = forms.CharField(
         label='確認用パスワード',
         required=True,
-        help_text="hogehogheo"
     )
 
     def __init__(self, *args, **kwargs):
@@ -50,12 +49,12 @@ class SignupForm(forms.ModelForm):
     def clean_password(self):
         value = self.cleaned_data['password']
         if 8 > len(value):
-            raise forms.ValidationError("パスワード")
+            raise forms.ValidationError('%(min_length)s文字以上で入力してください', params={'min_length': 8})
         return value
 
     def clean(self):
         if self.data['password'] != self.data['password2']:
-            raise forms.ValidationError("パスワードと確認用パスワードが合致しません")
+            raise forms.ValidationError('パスワードと確認用パスワードが合致しません')
         # ユニーク制約を自動でバリデーションしてほしい場合は super の clean() を明示的に呼び出す
         super().clean()
 
@@ -112,5 +111,7 @@ class PasswordEditForm(forms.Form):
     def clean(self):
         password = self.cleaned_data.get('password')
         password2 = self.cleaned_data.get('password2')
+        if 8 > len(password):
+            raise forms.ValidationError('%(min_length)s文字以上で入力してください', params={'min_length': 8})
         if password != password2:
             raise forms.ValidationError("パスワードが一致しません。")
