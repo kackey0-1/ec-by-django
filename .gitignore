@@ -1,3 +1,12 @@
+# editor's resources
 .venv
 .idea
+
+# environment
+.env
+
+# sqlite3
 db.sqlite3
+
+# css
+*.map

@@ -2,7 +2,12 @@
     <span>{{product.name}}</span>
     <span>{{product.description}}</span>
     <span>{{product.price}}</span>
+    <span>{{product.category.name}}</span>
     <a href="{% url 'product:detail' product.id %}">Show</a>
-    <a href="{% url 'product:edit' product.id %}">Edit</a><br>
+    <a href="{% url 'product:edit' product.id %}">Edit</a>
+    <form action="{% url 'product:delete' product.id %}" method="POST" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form><br>
 {% endfor %}
 <a href="{% url 'product:product' %}">New</a>
