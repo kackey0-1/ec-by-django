@@ -1,6 +1,7 @@
 # editor's resources
 .venv
 .idea
+screenshots
 
 # environment
 .env
