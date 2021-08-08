@@ -35,7 +35,7 @@ class TestSignupView(TestCase):
         self.assertFalse(response.context['form'].errors)
         self.assertTemplateUsed(response, 'user/signup.html')
 
-    def test_get_by_unauthenticated_user(self):
+    def test_get_by_authenticated_user(self):
         """
         Get /signup/ with login info in cookie
         Template /product/index.html
@@ -142,14 +142,10 @@ class LoginViewTest(TestCase):
             email='admin@example.com',
             password='password',
             is_active=True)
-        self.activate_user = get_user_model().objects.create_user(
-            email='activate@example.com',
-            password='password', )
 
     def tearDown(self) -> None:
         print("# {} is finished!".format(self.id()))
         get_user_model().objects.filter(email='admin@example.com').delete()
-        get_user_model().objects.filter(email='activate@example.com').delete()
 
     def test_get_login_template(self):
         """
@@ -182,26 +178,145 @@ class LoginViewTest(TestCase):
     def test_post_login_validation(self):
         """
         POST: /login/
-        CASE: login success
+        CASE: login failed because of wrong password
         """
         response = self.client.post('/login/', {
             'email': self.user.email,
-            'password': 'password', })
-        self.assertRedirects(response, '/products')
-        pass
+            'password': 'password1', })
+        self.assertFormError(response, 'form', None, '正しいメールアドレスとパスワードを入力してください')
+        self.assertTemplateUsed(response, 'user/login.html')
 
     def test_post_login_with_inactivated_user(self):
-        pass
+        """
+        POST: /login/
+        CASE: login failed because of wrong email
+        """
+        response = self.client.post('/login/', {
+            'email': self.user.email+'1',
+            'password': 'password', })
+        self.assertFormError(response, 'form', None, '正しいメールアドレスを入力してください')
+        self.assertTemplateUsed(response, 'user/login.html')
 
 
 class LogoutView(TestCase):
-
     def setUp(self) -> None:
-        pass
+        print("# {} is running!".format(self.id()))
+        self.user = get_user_model().objects.create_user(
+            email='admin@example.com',
+            password='password',
+            is_active=True)
 
     def tearDown(self) -> None:
-        pass
+        print("# {} is finished!".format(self.id()))
+        get_user_model().objects.filter(email='admin@example.com').delete()
 
     def test_logout(self):
-        pass
+        """
+        GET /logout/
+        CASE logout success
+        """
+        logged_in = self.client.login(email=self.user.email, password='password')
+        self.assertTrue(logged_in)
+        response = self.client.get('/logout/')
+        self.assertRedirects(response, '/login/')
 
+
+class PasswordResetViewTest(TestCase):
+    def setUp(self) -> None:
+        print("# {} is running!".format(self.id()))
+        self.user = get_user_model().objects.create_user(
+            email='admin@example.com',
+            password='password',
+            is_active=True)
+
+    def tearDown(self) -> None:
+        print("# {} is finished!".format(self.id()))
+        get_user_model().objects.filter(email='admin@example.com').delete()
+
+    def test_get_success(self):
+        """
+        GET /reset/
+        CASE reset success
+        """
+        response = self.client.get('/reset/')
+        self.assertTemplateUsed(response, 'user/reset_password.html')
+
+    def test_post_reset_success(self):
+        """
+        POST /reset/
+        CASE reset success
+        """
+        response = self.client.post('/reset/', {'email': self.user.email})
+        self.assertTemplateUsed(response, 'user/reset_password.html')
+
+    def test_post_reset_validation(self):
+        """
+        POST /reset/
+        CASE reset failed because of wrong email
+        """
+        response = self.client.post('/reset/', {'email': self.user.email + '1'})
+        self.assertFormError(response, 'form', None, '正しいメールアドレスを入力してください')
+        self.assertTemplateUsed(response, 'user/reset_password.html')
+
+
+class PasswordEditViewTest(TestCase):
+    def setUp(self) -> None:
+        print("# {} is running!".format(self.id()))
+        self.user = get_user_model().objects.create_user(
+            email='admin@example.com',
+            password='password',
+            is_active=True)
+
+    def tearDown(self) -> None:
+        print("# {} is finished!".format(self.id()))
+        get_user_model().objects.filter(email='admin@example.com').delete()
+
+    def test_post_success(self):
+        """
+        POST /edit/password/
+        CASE success
+        """
+        emailb64 = urlsafe_base64_encode(force_bytes(self.user.email))
+        token = default_token_generator.make_token(self.user)
+        response = self.client.get(f'/edit/password/{emailb64}/{token}/')
+        self.assertTemplateUsed(response, 'user/edit_password.html')
+        response = self.client.post('/edit/password/', {
+            'password': 'password1',
+            'password2': 'password1',
+            'emailb64': emailb64,
+            'token': token, })
+        self.assertTemplateUsed(response, 'user/complete_confirmation.html')
+
+    def test_post_failed_by_password_length_validation(self):
+        """
+        POST /edit/password/
+        CASE success
+        """
+        emailb64 = urlsafe_base64_encode(force_bytes(self.user.email))
+        token = default_token_generator.make_token(self.user)
+        response = self.client.get(f'/edit/password/{emailb64}/{token}/')
+        self.assertTemplateUsed(response, 'user/edit_password.html')
+        response = self.client.post('/edit/password/', {
+            'password': 'passwor',
+            'password2': 'password',
+            'emailb64': emailb64,
+            'token': token, })
+        self.assertFormError(response, 'form', None, '8文字以上で入力してください')
+        self.assertTemplateUsed(response, 'user/edit_password.html')
+
+    def test_post_failed_by_password_validation(self):
+        """
+        POST /edit/password/
+        CASE success
+        """
+        emailb64 = urlsafe_base64_encode(force_bytes(self.user.email))
+        token = default_token_generator.make_token(self.user)
+        response = self.client.get(f'/edit/password/{emailb64}/{token}/')
+        self.assertTemplateUsed(response, 'user/edit_password.html')
+        response = self.client.post('/edit/password/', {
+            'password': 'password',
+            'password2': 'password1',
+            'emailb64': emailb64,
+            'token': token, })
+        self.assertFormError(response, 'form', None, 'パスワードが一致しません')
+        self.assertTemplateUsed(response, 'user/edit_password.html')
