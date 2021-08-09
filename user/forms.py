@@ -86,7 +86,7 @@ class LoginForm(forms.Form):
         try:
             user = get_user_model().objects.get(email=email)
         except ObjectDoesNotExist:
-            raise forms.ValidationError("正しいメールアドレスを入力してください")
+            raise forms.ValidationError('正しいメールアドレスを入力してください')
         # パスワードはハッシュ化されて保存されているので平文での検索はできない
         if not user.check_password(password):
             raise forms.ValidationError("正しいメールアドレスとパスワードを入力してください")
@@ -99,6 +99,13 @@ class LoginForm(forms.Form):
 
 class PasswordResetForm(forms.Form):
     email = forms.CharField(label=_('メールアドレス'), widget=forms.TextInput(attrs={'placeholder': 'メールアドレス', 'autofocus': True}),)
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        try:
+            user = get_user_model().objects.get(email=email)
+        except ObjectDoesNotExist:
+            raise forms.ValidationError('正しいメールアドレスを入力してください')
 
 
 class PasswordEditForm(forms.Form):
@@ -114,4 +121,4 @@ class PasswordEditForm(forms.Form):
         if 8 > len(password):
             raise forms.ValidationError('%(min_length)s文字以上で入力してください', params={'min_length': 8})
         if password != password2:
-            raise forms.ValidationError("パスワードが一致しません。")
+            raise forms.ValidationError('パスワードが一致しません')
