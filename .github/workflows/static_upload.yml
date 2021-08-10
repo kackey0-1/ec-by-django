@@ -7,12 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shallwefootball/s3-upload-action@master
-        name: Upload S3
-        id: S3
+      - uses: ItsKarma/aws-cli@v1.70.0
         with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: django-static-resource
-          source_dir: 'static'
-          aws_region: ap-northeast-1
+          args: s3 sync --delete --acl public-read static/ s3://django-static-resource/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "ap-northeast-1"
