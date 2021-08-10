@@ -15,3 +15,9 @@ export DJANGO_PROFILE=stagging
 # or 
 export DJANGO_PROFILE=production
 ```
+
+## Github actions
+
+1. [Introduction to Github Actions](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions)
+2. [Add new encrypted secrets](https://docs.github.com/en/actions/reference/encrypted-secrets)
+
