@@ -11,8 +11,8 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 # Security settings #
 #####################
 DEBUG = False
-# SECRET_KEY = env('SECRET_KEY')
-# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+SECRET_KEY = env('SECRET_KEY')
+ALLOWED_HOSTS = ['*']
 
 
 ############
@@ -46,7 +46,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/{}/app.log'.format(PROJECT_NAME),
+            'filename': 'app.log'.format(PROJECT_NAME),
             'formatter': 'production',
         },
     },
@@ -67,11 +67,29 @@ LOGGING = {
     },
 }
 
+##################
+# Staticfiles
+##################
+# STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+AWS_ACCESS_KEY_ID = env.get_value('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env.get_value('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'django-static-resource'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+AWS_DEFAULT_ACL = None
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 ##################
 # Email settings #
 ##################
-EMAIL_CONFIG = env.email_url('EMAIL_URL')
-vars().update(EMAIL_CONFIG)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_CONFIG = env.email_url('EMAIL_URL')
+# vars().update(EMAIL_CONFIG)
 
 
