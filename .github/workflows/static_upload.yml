@@ -15,3 +15,4 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_bucket: django-static-resource
           source_dir: 'static'
+          aws_region: ap-northeast-1
