@@ -73,8 +73,8 @@ LOGGING = {
 ################
 # Static files #
 ################
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 
 ##################
