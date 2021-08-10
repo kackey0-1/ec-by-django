@@ -1,6 +1,7 @@
 asgiref==3.4.1
 boto3==1.18.17
 botocore==1.21.17
+chromedriver-binary==92.0.4515.107.0
 coverage==5.5
 Django==3.2.5
 django-appconf==1.0.4
