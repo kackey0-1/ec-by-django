@@ -13,6 +13,11 @@ from django.urls import reverse_lazy
 from pathlib import Path
 import os
 
+# django-environ
+# https://django-environ.readthedocs.io/en/latest/
+# SQLITE_URL=sqlite:///my-local-sqlite.db
+# DATABASE_URL=psql://urser:un-githubbedpassword@127.0.0.1:8458/database
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_NAME = os.path.basename(BASE_DIR)
@@ -33,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sass_processor',
+    'storages',
     'category',
     'product',
     'user',
@@ -106,11 +112,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_URL
-]
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_URL
+# ]
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
 SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.(sass|scss)$'
 SASS_PRECISION = 8
