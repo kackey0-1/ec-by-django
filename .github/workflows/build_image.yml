@@ -23,6 +23,9 @@ jobs:
         with:
           images: kackey01/ec-by-django
 
+      - name: Create env file
+        run: touch .env
+
       - name: Echo SECRET_KEY
         run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env"
 
@@ -34,9 +37,6 @@ jobs:
 
       - name: Echo AWS_SECRET_ACCESS_KEY
         run: echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env"
-
-      - name: LS env file
-        run: pwd
 
       - name: LS env file
         run: ls -l
