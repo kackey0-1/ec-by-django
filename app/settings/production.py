@@ -42,11 +42,10 @@ LOGGING = {
     },
     # ハンドラ
     'handlers': {
-        # ファイル出力用ハンドラ
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'app.log'.format(PROJECT_NAME),
+        # コンソール出力用ハンドラ
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'production',
         },
     },
@@ -54,17 +53,48 @@ LOGGING = {
     'loggers': {
         # 自作アプリケーション全般のログを拾うロガー
         '': {
-            'handlers': ['file'],
-            'level': 'INFO',
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
         # Django本体が出すログ全般を拾うロガー
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
+        # 発行されるSQL文を出力するための設定
+        # 'django.db.backends': {
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG',
+        #     'propagate': False,
+        # },
     },
+    # # ハンドラ
+    # 'handlers': {
+    #     # ファイル出力用ハンドラ
+    #     'file': {
+    #         'level': 'INFO',
+    #         'class': 'logging.FileHandler',
+    #         'filename': 'app.log'.format(PROJECT_NAME),
+    #         'formatter': 'production',
+    #     },
+    # },
+    # # ロガー
+    # 'loggers': {
+    #     # 自作アプリケーション全般のログを拾うロガー
+    #     '': {
+    #         'handlers': ['file'],
+    #         'level': 'INFO',
+    #         'propagate': False,
+    #     },
+    #     # Django本体が出すログ全般を拾うロガー
+    #     'django': {
+    #         'handlers': ['file'],
+    #         'level': 'INFO',
+    #         'propagate': False,
+    #     },
+    # },
 }
 
 ##################
