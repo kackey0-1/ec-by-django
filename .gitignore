@@ -11,3 +11,6 @@ db.sqlite3
 
 # css
 *.map
+
+# log
+app.log
