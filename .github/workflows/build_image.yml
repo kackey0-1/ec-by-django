@@ -32,6 +32,9 @@ jobs:
       - name: Echo DATABASE_URL
         run: echo "DATABASE_URL=sqlite:///db.sqlite3" >> .env
 
+      - name: Echo SQLITE_URL
+        run: echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
+
       - name: Echo AWS_ACCESS_KEY_ID
         run: echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
 
