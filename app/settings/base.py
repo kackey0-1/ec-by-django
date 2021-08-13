@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sass_processor',
     'storages',
-    'category',
     'product',
     'user',
 ]
