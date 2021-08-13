@@ -62,7 +62,7 @@ jobs:
       env:
         IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
       with:
-        task-definition: node-ecs-task-def.json
+        task-definition: django_app-ecs-task-def.json
         container-name: django_app
         image: ${{ steps.login-ecr.outputs.registry }}/django_app:${{ env.IMAGE_TAG }}
 
