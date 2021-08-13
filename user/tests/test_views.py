@@ -43,7 +43,7 @@ class TestSignupView(TestCase):
         logged_in = self.client.login(email=self.user.email, password='password')
         self.assertTrue(logged_in)
         response = self.client.get('/signup/')
-        self.assertRedirects(response, '/products')
+        self.assertRedirects(response, '/products/')
 
     def test_post_success(self):
         """
@@ -163,7 +163,7 @@ class LoginViewTest(TestCase):
         logged_in = self.client.login(email=self.user.email, password='password')
         self.assertTrue(logged_in)
         response = self.client.get('/login/')
-        self.assertRedirects(response, '/products')
+        self.assertRedirects(response, '/products/')
 
     def test_post_login_success(self):
         """
@@ -173,7 +173,7 @@ class LoginViewTest(TestCase):
         response = self.client.post('/login/', {
             'email': self.user.email,
             'password': 'password', })
-        self.assertRedirects(response, '/products')
+        self.assertRedirects(response, '/products/')
 
     def test_post_login_validation(self):
         """

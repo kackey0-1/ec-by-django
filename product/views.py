@@ -25,7 +25,7 @@ class ProductIndexView(LoginRequiredMixin, ListView):
 
 
 class ProductCreateView(CreateView):
-    template_name = 'product/create.html'
+    template_name = 'product/new.html'
     model = Product
     fields = ['name', 'description', 'price']
     success_url = reverse_lazy('product:index')
