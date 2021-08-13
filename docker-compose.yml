@@ -1,13 +1,18 @@
 version: '3'
 
 services:
-  db:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: django
-      MYSQL_USER: django
-      MYSQL_PASSWORD: django
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#  db:
+#    image: mysql:5.7
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: django
+#      MYSQL_USER: django
+#      MYSQL_PASSWORD: django
+#    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#    ports:
+#    - "3306:3306"
+
+  django:
+    image: kackey01/ec-by-django:dev-4abb4fb
     ports:
-    - 3306:3306
+      - "8000:8000"

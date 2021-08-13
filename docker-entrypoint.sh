@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Install packages for local
+# Install packages for production
 pip3 install -r requirements.txt
-
-# Set environment for local
-export DJANGO_PROFILE=local
-
+# Set environment for production
+export DJANGO_PROFILE=production
 # Prepare database
 python3 manage.py migrate
 # Start runserver
