@@ -1,9 +1,11 @@
 name: Build and Push
 
-on:
-  push:
-    tags:
-      - v*
+#on:
+#  push:
+#    tags:
+#      - v*
+
+on: [push]
 
 jobs:
   build-and-push:
