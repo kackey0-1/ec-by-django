@@ -56,7 +56,7 @@ jobs:
         IMAGE_TAG=master
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    #   IMAGE_TAG_=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+    #   IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
 
     # Insert Image URI to Task Definition
     - name: render new task definition
@@ -64,15 +64,15 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       env:
         IMAGE_TAG: master
-      # IMAGE_TAG_: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+      # IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
       with:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
         image: ${{ steps.login-ecr.outputs.registry }}/django_app:${{ env.IMAGE_TAG }}
 
     # Update Task Definition
-    - name: register new task definition family
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-container.outputs.task-definition }}
-        cluster: sandcastle
+#    - name: register new task definition family
+#      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#      with:
+#        task-definition: ${{ steps.render-container.outputs.task-definition }}
+#        cluster: sandcastle
