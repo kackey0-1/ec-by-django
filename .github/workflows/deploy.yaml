@@ -12,9 +12,11 @@ jobs:
     timeout-minutes: 300
 
     steps:
-    - uses: actions/checkout@v1
+    # Initial setup
+    - name: checkout
+      uses: actions/checkout@v2
 
-    - name: Configure AWS Credentials
+    - name: configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
@@ -39,6 +41,7 @@ jobs:
     - name: Echo AWS_SECRET_ACCESS_KEY
       run: echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
+    # build and push this image
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -51,3 +54,21 @@ jobs:
         IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # Insert Image URI to Task Definition
+    - name: render new task definition
+      id: render-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      env:
+        IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+      with:
+        task-definition: node-ecs-task-def.json
+        container-name: django_app
+        image: ${{ steps.login-ecr.outputs.registry }}/django_app:${{ env.IMAGE_TAG }}
+
+    # Update Task Definition
+    - name: register new task definition family
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.render-container.outputs.task-definition }}
+        cluster: sandcastle
