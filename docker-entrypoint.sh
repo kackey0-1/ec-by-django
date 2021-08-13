@@ -9,4 +9,4 @@ export DJANGO_PROFILE=local
 # Prepare database
 python3 manage.py migrate
 # Start runserver
-gunicorn app.wsgi --reload
+gunicorn app.wsgi --reload --bind 0.0.0.0:8000
