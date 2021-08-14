@@ -1,4 +1,4 @@
-name: Deploy for preview
+name: S3 resources deploy
 
 on: [push]
 

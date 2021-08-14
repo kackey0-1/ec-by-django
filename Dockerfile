@@ -1,5 +1,9 @@
 FROM python:3
 
+RUN useradd -ms /bin/bash  ec-service
+
+USER ec-service
+
 WORKDIR /usr/src/app
 
 COPY . .

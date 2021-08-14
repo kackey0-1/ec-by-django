@@ -2,22 +2,26 @@
 {% load static %}
 {% block title %}Product Index{% endblock %}
 {% block content %}
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-5">
-      {% for product in products %}
-      <span>{{product.name}}</span>
-      <span>{{product.description}}</span>
-      <span>{{product.price}}</span>
-      <span>{{product.category.name}}</span>
-      <a href="{% url 'product:detail' product.id %}">Show</a>
-      <a href="{% url 'product:edit' product.id %}">Edit</a>
-      <form action="{% url 'product:delete' product.id %}" method="POST" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-      </form><br>
-      {% endfor %}
-      <a href="{% url 'product:product' %}">New</a>
+<div class="row">
+  <div class="col-9">
+    <div class="container mt-4">
+      <div class="row w-100">
+        {% for product in products %}
+        <div class="col-3">
+          <a href="{% url 'product:detail' product.id %}">
+            <img class="img-thumbnail" src="{% static 'images/fake.png' %}" />
+          </a>
+          <div class="row">
+            <div class="col-12">
+              <p class="samazon-product-label mt-2">
+                {{product.name}}<br>
+                <label>¥ {{product.price}}</label>
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
