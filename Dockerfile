@@ -1,5 +1,7 @@
 FROM python:3
 
+USER ec-service
+
 WORKDIR /usr/src/app
 
 COPY . .
