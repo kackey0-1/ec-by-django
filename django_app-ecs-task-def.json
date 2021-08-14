@@ -1,6 +1,5 @@
 {
   "family": "django_app",
-  "executionRoleArn": "arn:aws:iam::424041797444:role/django-iam-role-ecs",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE" ],
   "cpu": "256",
@@ -8,7 +7,6 @@
   "containerDefinitions": [
     {
       "name": "django_app",
-      "image": "424041797444.dkr.ecr.ap-northeast-1.amazonaws.com/django_app",
       "essential": true,
       "memory": 384,
       "memoryReservation": 128,
