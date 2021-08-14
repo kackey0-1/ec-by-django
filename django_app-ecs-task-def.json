@@ -1,6 +1,7 @@
 {
   "family": "django_app",
   "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::424041797444:role/django-iam-role-ecs",
   "requiresCompatibilities": ["FARGATE" ],
   "cpu": "256",
   "memory": "512",
