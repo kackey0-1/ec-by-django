@@ -31,6 +31,7 @@ module "iam" {
   source = "../modules/iam"
 }
 
+/*
 module "alb" {
   source            = "../modules/alb"
   ENV               = var.ENV
@@ -41,7 +42,6 @@ module "alb" {
   PRIVATE_SUBNETS   = module.vpc.private_subnets
   PUBLIC_SUBNETS    = module.vpc.public_subnets
   ALB_SG_ID         = module.sg.alb_sg_id
-//  DJANGO_SG_ID      = module.sg.django_sg_id
 }
 
 
@@ -61,3 +61,4 @@ module "ecs" {
   ECR_REPO_URL      = module.ecr.ecr_repository_url
   ECS_TASK_ROLE     = module.iam.ecs_task_execution_role
 }
+*/
