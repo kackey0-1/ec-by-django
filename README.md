@@ -16,6 +16,14 @@ export DJANGO_PROFILE=stagging
 export DJANGO_PROFILE=production
 ```
 
+## Test
+```shell
+python manage.py test
+# coverage
+coverage run --source='.' manage.py test
+coverage report
+```
+
 ## Github actions
 
 1. [Introduction to Github Actions](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions)

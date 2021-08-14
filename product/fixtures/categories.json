@@ -1,6 +1,6 @@
 [
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 1,
     "fields": {
       "name": "ビジネス",
@@ -11,7 +11,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 2,
     "fields": {
       "name": "文学・評論",
@@ -22,7 +22,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 3,
     "fields": {
       "name": "人文・思想",
@@ -33,7 +33,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 4,
     "fields": {
       "name": "スポーツ",
@@ -44,7 +44,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 5,
     "fields": {
       "name": "コンピュータ・IT",
@@ -55,7 +55,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 6,
     "fields": {
       "name": "資格・検定・就職",
@@ -66,7 +66,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 7,
     "fields": {
       "name": "絵本・児童書",
@@ -77,7 +77,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 8,
     "fields": {
       "name": "写真集",
@@ -88,7 +88,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 9,
     "fields": {
       "name": "ゲーム攻略本",
@@ -99,7 +99,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 10,
     "fields": {
       "name": "雑誌",
@@ -110,7 +110,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 11,
     "fields": {
       "name": "アート・デザイン",
@@ -121,7 +121,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 12,
     "fields": {
       "name": "ゲーム攻略本",
@@ -132,7 +132,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 13,
     "fields": {
       "name": "ノンフィクション",
@@ -143,7 +143,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 14,
     "fields": {
       "name": "ゲーム攻略本",
@@ -154,7 +154,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 15,
     "fields": {
       "name": "ノートPC",
@@ -165,7 +165,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 16,
     "fields": {
       "name": "デスクトップPC",
@@ -176,7 +176,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 17,
     "fields": {
       "name": "タブレット",
@@ -187,7 +187,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 18,
     "fields": {
       "name": "19~20インチ",
@@ -198,7 +198,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 19,
     "fields": {
       "name": "デスクトップPC",
@@ -209,7 +209,7 @@
     }
   },
   {
-    "model": "category.Category",
+    "model": "product.Category",
     "pk": 20,
     "fields": {
       "name": "タブレット",

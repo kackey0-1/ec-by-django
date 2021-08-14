@@ -15,4 +15,4 @@ services:
   django:
     image: kackey01/ec-by-django:dev-4abb4fb
     ports:
-      - "8000:8000"
+    - "8000:8000"

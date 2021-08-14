@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
 from .models import Product
-from category.models import Category
+from .models import Category
 logger = logging.getLogger(__name__)
 
 
