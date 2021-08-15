@@ -1,0 +1,11 @@
+variable "ENV" {}
+variable "PREFIX" {}
+variable "AWS_REGION" {}
+variable "DEFAULT_TAGS" {}
+variable "VPC_ID" {}
+variable "PUBLIC_SUBNETS" {}
+variable "PRIVATE_SUBNETS" {}
+variable "DB_SG_ID" {}
+variable "TEMP_SG_ID" {}
+variable "USERNAME" {}
+variable "PASSWORD" {}
