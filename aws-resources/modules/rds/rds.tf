@@ -52,6 +52,7 @@ resource "aws_db_instance" "default_bastion" {
       private_key = file("~/.ssh/ec2_cert.pem")
     }
 
+
     source      = "./schema.sql"
     destination = "~"
   }
