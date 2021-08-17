@@ -1,7 +1,5 @@
 FROM python:3
 
-RUN apt update
-RUN apt install libmysqlclient-dev
 RUN useradd -ms /bin/bash  ec-service
 USER ec-service
 
