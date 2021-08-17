@@ -1,11 +1,9 @@
 name: deploy newly built image
 
-on: [push]
-
-#on:
-#  push:
-#    tags:
-#      - v*
+on:
+  push:
+    tags:
+      - v*
 
 env:
   AWS_REGION: ap-northeast-1
@@ -41,8 +39,8 @@ jobs:
 
     - name: Set IMAGE_TAG to GITHUB_ENV
       run: |
-        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
-        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
+        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
+        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
       # build and push this image
     - name: Login to Amazon ECR

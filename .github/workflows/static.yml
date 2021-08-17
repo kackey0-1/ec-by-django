@@ -1,16 +1,16 @@
-#name: S3 resources deploy
-#
-#on: [push]
-#
-#jobs:
-#  preview:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: ItsKarma/aws-cli@v1.70.0
-#        with:
-#          args: s3 sync --delete --acl public-read static/ s3://django-static-resource/static
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_DEFAULT_REGION: "ap-northeast-1"
+name: S3 resources deploy
+
+on: [push]
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ItsKarma/aws-cli@v1.70.0
+        with:
+          args: s3 sync --delete --acl public-read static/ s3://django-static-resource/static
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "ap-northeast-1"
