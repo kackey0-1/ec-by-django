@@ -63,8 +63,6 @@ jobs:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
         image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-      run: |
-        cat django_app-ecs-task-def.json
 
     # Update Task Definition
     - name: register new task definition family
