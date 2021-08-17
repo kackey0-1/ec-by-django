@@ -29,3 +29,8 @@ coverage report
 1. [Introduction to Github Actions](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions)
 2. [Add new encrypted secrets](https://docs.github.com/en/actions/reference/encrypted-secrets)
 
+## Terraform
+
+```bash
+terraform destroy -target=module.vpc
+```

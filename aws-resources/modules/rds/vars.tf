@@ -5,7 +5,10 @@ variable "DEFAULT_TAGS" {}
 variable "VPC_ID" {}
 variable "PUBLIC_SUBNETS" {}
 variable "PRIVATE_SUBNETS" {}
+variable "DB_SUBNET_GROUP" {}
 variable "DB_SG_ID" {}
 variable "TEMP_SG_ID" {}
 variable "USERNAME" {}
 variable "PASSWORD" {}
+variable "APP_USER" {}
+variable "APP_PASS" {}

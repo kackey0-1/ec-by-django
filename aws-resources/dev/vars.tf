@@ -3,3 +3,5 @@ variable "PREFIX" { description = "project name" }
 variable "ENV" { description = "Environment Name" }
 variable "USERNAME" {}
 variable "PASSWORD" {}
+variable "APP_USER" {}
+variable "APP_PASS" {}

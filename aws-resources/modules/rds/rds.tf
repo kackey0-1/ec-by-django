@@ -1,6 +1,25 @@
 ######################
 # RDS
 ######################
+resource "aws_db_instance" "django_db" {
+  identifier           = "${var.ENV}${var.PREFIX}"
+  allocated_storage    = 5
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t3.micro"
+  username             = var.USERNAME
+  password             = var.PASSWORD
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+  vpc_security_group_ids = [var.DB_SG_ID]
+  db_subnet_group_name = var.DB_SUBNET_GROUP
+
+  tags = merge(
+    var.DEFAULT_TAGS,
+    { "Name": "${var.ENV}-${var.PREFIX}-db" }
+  )
+}
 
 resource "aws_key_pair" "instance_key" {
   key_name   = "temp_instance_key"
@@ -13,10 +32,10 @@ resource "aws_key_pair" "instance_key" {
 }
 
 resource "aws_instance" "temp_instance" {
-  ami           = "amzn-ami-hvm-2018.03.0.20190826-x86_64-gp2"
+  ami           = "ami-0ab3e16f9c414dee7"
   instance_type = "t2.micro"
   key_name      = aws_key_pair.instance_key.key_name
-  vpc_security_group_ids = var.TEMP_SG_ID
+  vpc_security_group_ids = [var.TEMP_SG_ID]
   subnet_id = var.PUBLIC_SUBNETS[0]
 
   root_block_device {
@@ -30,40 +49,28 @@ resource "aws_instance" "temp_instance" {
   )
 
   lifecycle { create_before_destroy = true }
-}
 
-#Apply scheme by using bastion host
-resource "aws_db_instance" "default_bastion" {
-  identifier           = "${var.ENV}${var.PREFIX}"
-  allocated_storage    = 5
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t3.micro"
-  username             = var.USERNAME
-  password             = var.PASSWORD
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
 
   provisioner "file" {
-      connection {
+    connection {
       user        = "ec2-user"
-      host        = "bastion.example.com"
-      private_key = file("~/.ssh/ec2_cert.pem")
+      host        = aws_instance.temp_instance.public_ip
+      private_key = file("~/.ssh/id_rsa")
     }
 
-
-    source      = "./schema.sql"
-    destination = "~"
+    source      = "../scripts/schema.sh"
+    destination = "/home/ec2-user/schema.sh"
   }
 
   provisioner "remote-exec" {
     connection {
       user        = "ec2-user"
-      host        = "bastion.example.com"
-      private_key = file("~/.ssh/ec2_cert.pem")
+      host        = aws_instance.temp_instance.public_ip
+      private_key = file("~/.ssh/id_rsa")
     }
 
-    command = "mysql --host=${self.address} --port=${self.port} --user=${self.username} --password=${self.password} < ~/schema.sql"
+    inline = [
+      "/bin/bash ~/schema.sh ${aws_db_instance.django_db.address} ${aws_db_instance.django_db.port} ${var.USERNAME} ${var.PASSWORD} ${var.APP_USER} ${var.APP_PASS}"
+    ]
   }
 }
