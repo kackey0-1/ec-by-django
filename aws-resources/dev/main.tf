@@ -42,13 +42,14 @@ module "rds" {
   TEMP_SG_ID        = module.sg.temp_sg_id
   PUBLIC_SUBNETS    = module.vpc.public_subnets
   PRIVATE_SUBNETS   = module.vpc.private_subnets
+  DB_SUBNET_GROUP   = module.vpc.database_subnet_group
   DB_SG_ID          = module.sg.db_sg_id
   USERNAME          = var.USERNAME
   PASSWORD          = var.PASSWORD
+  APP_USER          = var.APP_USER
+  APP_PASS          = var.APP_PASS
 }
 
-
-/*
 module "alb" {
   source            = "../modules/alb"
   ENV               = var.ENV
@@ -78,7 +79,6 @@ module "ecs" {
   ECR_REPO_URL      = module.ecr.ecr_repository_url
   ECS_TASK_ROLE     = module.iam.ecs_task_execution_role
 }
-*/
 
 output "vpc_info" {
   description = "vpc info"
