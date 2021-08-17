@@ -38,6 +38,8 @@ jobs:
         echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+        # run: echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
       # build and push this image
     - name: Login to Amazon ECR
@@ -48,12 +50,9 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-        IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")
       run: |
-        # export IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
-        echo ${{ env.IMAGE_TAG }}
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
 
     # Insert Image URI to Task Definition
     - name: render new task definition
