@@ -38,6 +38,9 @@ jobs:
         echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+
+    - name: Set IMAGE_TAG to GITHUB_ENV
+      run: |
         # run: echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
         run: echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
