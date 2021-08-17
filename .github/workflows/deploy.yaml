@@ -1,9 +1,11 @@
 name: deploy newly built image
 
-on:
-  push:
-    tags:
-      - v*
+on: [push]
+
+#on:
+#  push:
+#    tags:
+#      - v*
 
 env:
   AWS_REGION: ap-northeast-1
@@ -58,7 +60,7 @@ jobs:
       with:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
-        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
 
     # Update Task Definition
     - name: register new task definition family
