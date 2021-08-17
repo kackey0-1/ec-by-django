@@ -46,10 +46,9 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-        IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
 
     # Insert Image URI to Task Definition
     - name: render new task definition
