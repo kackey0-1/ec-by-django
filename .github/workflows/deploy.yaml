@@ -48,9 +48,10 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")
       run: |
         # export IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
-        export IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")
+        echo ${{ env.IMAGE_TAG }}
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -61,7 +62,9 @@ jobs:
       with:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
-        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+      run: |
+        cat django_app-ecs-task-def.json
 
     # Update Task Definition
     - name: register new task definition family
