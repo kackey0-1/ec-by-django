@@ -47,15 +47,14 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g") .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+        export IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     # Insert Image URI to Task Definition
     - name: render new task definition
       id: render-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
-      env:
-        IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
       with:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
