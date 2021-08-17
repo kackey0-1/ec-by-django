@@ -10,7 +10,6 @@ env:
   ECR_REPOSITORY: django_app
   ECS_CLUSTER: django-app
   ECS_SERVICE: django_app
-  IMAGE_TAG: $(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
 
 jobs:
   build-and-push:
@@ -33,12 +32,12 @@ jobs:
     - name: Create env file
       run: |
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        echo "DATABASE_URL=sqlite:///db.sqlite3" >> .env
+        echo "DATABASE_URL=${{ secrets.RDS_URL }}" >> .env
         echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
-    # build and push this image
+      # build and push this image
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -47,10 +46,9 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ env.IMAGE_TAG }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g") .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
 
     # Insert Image URI to Task Definition
     - name: render new task definition
@@ -59,7 +57,7 @@ jobs:
       with:
         task-definition: django_app-ecs-task-def.json
         container-name: django_app
-        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
 
     # Update Task Definition
     - name: register new task definition family
