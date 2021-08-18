@@ -33,7 +33,7 @@ resource "aws_ecs_service" "main" {
   }
 
   network_configuration {
-    subnets          = var.PRIVATE_SUBNETS
+    subnets          = var.PUBLIC_SUBNETS
     security_groups  = [var.DJANGO_SG_ID]
     assign_public_ip = true
   }
