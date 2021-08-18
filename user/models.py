@@ -106,7 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     class Meta(object):
-        db_table = 'user'
+        db_table = 'auth_user'
 
 
 
