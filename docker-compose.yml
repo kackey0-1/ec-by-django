@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
 
-  django:
-    image: docker.io/library/ecdjago:latest
-    ports:
-    - "8000:8000"
+#  django:
+#    image: docker.io/library/ecdjago:latest
+#    ports:
+#    - "8000:8000"
