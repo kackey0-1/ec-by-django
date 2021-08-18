@@ -2,6 +2,10 @@
 
 ## setup
 ```shell
+docker build -t ecdjago:latest .
+docker-compose up -d
+/bin/bash aws-resources/scripts/schema.sh localhost 5432 postgres postgres ecdjango ecdjango
+
 python manage.py migrate
 # run with dev tool
 python manage.py runserver

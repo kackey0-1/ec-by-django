@@ -65,8 +65,8 @@ resource "aws_security_group" "django_db" {
   }
 
   ingress {
-    from_port       = 3306
-    to_port         = 3306
+    from_port       = 5432
+    to_port         = 5432
     protocol        = "tcp"
     cidr_blocks = [var.VPC_CIDR_BLOCK]
   }
