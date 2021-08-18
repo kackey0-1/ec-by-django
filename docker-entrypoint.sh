@@ -6,5 +6,7 @@ pip3 install -r requirements.txt
 export DJANGO_PROFILE=production
 # Prepare database
 python3 manage.py migrate
+#
+cat .env
 # Start runserver
-gunicorn app.wsgi --reload --bind 0.0.0.0:8000
+python3 -m gunicorn app.wsgi --reload --bind 0.0.0.0:8000
