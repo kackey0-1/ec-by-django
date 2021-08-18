@@ -1,9 +1,10 @@
 name: deploy newly built image
 
-on:
-  push:
-    tags:
-      - v*
+#on:
+#  push:
+#    tags:
+#      - v*
+on: [push]
 
 env:
   AWS_REGION: ap-northeast-1
@@ -32,15 +33,15 @@ jobs:
     - name: Create env file
       run: |
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        echo "DATABASE_URL=${{ secrets.RDS_URL }}" >> .env
+        echo "DATABASE_URL=sqlite:///db.sqlite3" >> .env
         echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
     - name: Set IMAGE_TAG to GITHUB_ENV
       run: |
-        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
-        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
+        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
+        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
       # build and push this image
     - name: Login to Amazon ECR
