@@ -1,9 +1,10 @@
 name: deploy newly built image
 
-on:
-  push:
-    tags:
-      - v*
+#on:
+#  push:
+#    tags:
+#      - v*
+on: [push]
 
 env:
   AWS_REGION: ap-northeast-1
