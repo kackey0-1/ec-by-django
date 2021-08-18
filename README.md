@@ -2,6 +2,7 @@
 
 ## setup
 ```shell
+docker build -t ecdjago:latest .
 docker-compose up -d
 /bin/bash aws-resources/scripts/schema.sh localhost 5432 postgres postgres ecdjango ecdjango
 
