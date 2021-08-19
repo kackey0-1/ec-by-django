@@ -19,7 +19,6 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': env.db(),
 }
-print(DATABASES)
 
 
 ###########
