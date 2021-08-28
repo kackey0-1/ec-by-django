@@ -1,0 +1,42 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm samazon-header-container">
+    <a class="navbar-brand" href="/">Django</a>
+    <form class="form-inline">
+      <div class="form-group">
+        <input class="form-control samazon-header-search-input">
+      </div>
+      <div class="input-group">
+        <button type="submit" class="btn samazon-header-search-button"><i class="fas fa-search samazon-header-search-icon"></i></button>
+      </div>
+    </form>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Right Side Of Navbar -->
+      <ul class="navbar-nav ml-auto mr-5 mt-2">
+      <!-- user_signed_in? はユーザがログインしているか調べるdeviseのHelperメソッド -->
+      {% if user.is_authenticated %}
+        <li class="nav-item mr-5">
+        <a href="{% url 'user:logout' %}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a>
+        </li>
+      {% else %}
+        <li class="nav-item mr-5">
+          <a class="nav-link" href="{% url 'user:signup' %}">登録</a>
+        </li>
+        <li class="nav-item mr-5">
+          <a class="nav-link" href="{% url 'user:login' %}">ログイン</a>
+        </li>
+        <hr>
+        <li class="nav-item mr-5">
+          <a href="{% url 'user:login' %}" class="nav-link"><i class="far fa-heart"></i></a>
+        </li>
+        <li class="nav-item mr-5">
+          <a href="{% url 'user:login' %}" class="nav-link"><i class="fas fa-shopping-cart"></i></a>
+        </li>
+      {% endif %}
+      </ul>
+    </div>
+  </nav>
+</header>
