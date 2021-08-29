@@ -8,7 +8,7 @@ env:
   ECS_SERVICE: django_app
 
 jobs:
-  build-and-push:
+  build-and-push-for-ecr:
 
     runs-on: ubuntu-latest
     timeout-minutes: 300
@@ -37,7 +37,8 @@ jobs:
 
     - name: Set IMAGE_TAG to GITHUB_ENV
       run: |
-        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
+        echo "IMAGE_TAG=master" >> $GITHUB_ENV
+        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
         # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
       # build and push this image
