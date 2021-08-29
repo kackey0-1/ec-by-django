@@ -41,6 +41,11 @@ resource "aws_ecs_service" "main" {
   lifecycle {
     ignore_changes = [desired_count, task_definition]
   }
+
+  tags = merge(
+    var.DEFAULT_TAGS,
+    { "Name": "${var.ENV}-${var.PREFIX}-ecs" }
+  )
 }
 
 ######################
