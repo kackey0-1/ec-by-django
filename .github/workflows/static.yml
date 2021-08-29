@@ -9,8 +9,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ItsKarma/aws-cli@v1.70.0
         with:
-          args: s3 sync --delete --acl public-read static/ s3://django-static-resource/static
+          args: s3 sync --delete --acl public-read static/ s3://${{ secrets.S3_STATIC_BUCKET }}/static
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: "ap-northeast-1"
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}

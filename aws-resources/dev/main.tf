@@ -32,6 +32,7 @@ module "iam" {
   source = "../modules/iam"
 }
 
+/*
 module "rds" {
   source = "../modules/rds"
   ENV               = var.ENV
@@ -103,5 +104,5 @@ output "ecs_task_iam_role" {
     "ecs_task_iam_role": module.iam.ecs_task_execution_role
   }
 }
-
+*/
 
