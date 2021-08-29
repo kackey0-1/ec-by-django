@@ -17,8 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from .views import health
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health/', health),
     path('', include('product.urls')),
     path('', include('user.urls')),
     path('', RedirectView.as_view(url='/products'))

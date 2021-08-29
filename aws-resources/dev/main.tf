@@ -103,5 +103,3 @@ output "ecs_task_iam_role" {
     "ecs_task_iam_role": module.iam.ecs_task_execution_role
   }
 }
-
-

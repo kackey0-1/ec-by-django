@@ -5,3 +5,6 @@ variable "USERNAME" {}
 variable "PASSWORD" {}
 variable "APP_USER" {}
 variable "APP_PASS" {}
+variable "TF_ROLE" {}
+variable "aws_access_key_id" {}
+variable "aws_secret_access_key" {}

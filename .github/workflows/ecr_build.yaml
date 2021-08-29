@@ -1,10 +1,6 @@
 name: deploy newly built image
 
-on:
-  push:
-    tags:
-      - v*
-
+on: [push]
 env:
   AWS_REGION: ap-northeast-1
   ECR_REPOSITORY: django_app
@@ -12,7 +8,7 @@ env:
   ECS_SERVICE: django_app
 
 jobs:
-  build-and-push:
+  build-and-push-for-ecr:
 
     runs-on: ubuntu-latest
     timeout-minutes: 300
@@ -28,6 +24,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
     - name: Create env file
       run: |
@@ -40,7 +37,8 @@ jobs:
 
     - name: Set IMAGE_TAG to GITHUB_ENV
       run: |
-        echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
+        echo "IMAGE_TAG=master" >> $GITHUB_ENV
+        # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')" >> $GITHUB_ENV
         # echo "IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")" >> $GITHUB_ENV
 
       # build and push this image
@@ -56,20 +54,3 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
 
-    # Insert Image URI to Task Definition
-    - name: render new task definition
-      id: render-container
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: django_app-ecs-task-def.json
-        container-name: django_app
-        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-
-    # Update Task Definition
-    - name: register new task definition family
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-container.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true

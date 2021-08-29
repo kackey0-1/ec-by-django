@@ -30,6 +30,7 @@ jobs:
           echo "SQLITE_URL=sqlite:///db.sqlite3" >> .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_KEY_ID }}" >> .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "S3_STATIC_BUCKET=${{ secrets.S3_STATIC_BUCKET }}" >> .env
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
