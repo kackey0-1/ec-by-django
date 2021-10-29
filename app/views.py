@@ -6,5 +6,5 @@ from rest_framework.response import Response
 @api_view(['GET'])
 def health(self, *args, **kwargs):
     status_code = 200
-    results = {'status': 'UP'}
+    results = {'status': 'HOGEHOGE'}
     return Response(results, status=status_code)
